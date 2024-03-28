@@ -45,7 +45,8 @@ class GymViewModel : ViewModel() {
 
     try {
       updateLocalDatabase()
-    } catch (ex: Exception) { }
+    } catch (ex: Exception) {
+    }
     gymDao.getAllGym()
   }
 
