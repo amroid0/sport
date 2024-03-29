@@ -1,6 +1,8 @@
 package com.amroid.sport.ui
 
 import android.util.Log
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -20,11 +22,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class GymViewModel : ViewModel() {
-  var state by mutableStateOf(GymState(arrayListOf(), isLoading = true))
+  var _state by mutableStateOf(GymState(arrayListOf(), isLoading = true))
+  val state:State<GymState>
+    get() = derivedStateOf { _state }
    private val gymRepo = GymRepository()
   private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
     throwable.printStackTrace()
-    state = state.copy(isLoading = false, error = "${throwable.message}")
+    _state = _state.copy(isLoading = false, error = "${throwable.message}")
   }
 
   init {
@@ -32,10 +36,10 @@ class GymViewModel : ViewModel() {
   }
 
 
-  fun getGymList() {
+  private fun getGymList() {
     viewModelScope.launch {
    val list = getAllGyms()
-      state = state.copy(gym = list,isLoading = false)
+      _state = _state.copy(gym = list,isLoading = false)
     }
   }
 
@@ -45,11 +49,11 @@ class GymViewModel : ViewModel() {
 
 
   fun favoriteGym(id: Int) {
-    val list = state.gym
+    val list = state.value.gym
     val gymIndex = list.indexOfFirst { id == it.id }
     viewModelScope.launch {
      val updateList = gymRepo.favroitGym(id, !list[gymIndex].isFav)
-      state =  state.copy(gym = updateList,isLoading = false)
+      _state = _state.copy(gym = updateList,isLoading = false)
     }
 
   }
