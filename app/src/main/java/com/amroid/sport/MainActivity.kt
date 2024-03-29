@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
     NavHost(navController = nav, startDestination = "gym") {
       composable("gym") {
         val viewModel = viewModel<GymViewModel>()
-        GymScreen(gymList = viewModel.state, onFavoriteClicked = {
+        GymScreen(state = viewModel.state, onFavoriteClicked = {
           viewModel.favoriteGym(it)
         }, onItemClicked = {
           nav.navigate("gym_detail/$it")

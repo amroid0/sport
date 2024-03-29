@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,12 +24,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GymScreen(gymList: List<Gym>, onFavoriteClicked: (id: Int) -> Unit, onItemClicked: (id: Int) -> Unit) {
+fun GymScreen(state: GymState, onFavoriteClicked: (id: Int) -> Unit, onItemClicked: (id: Int) -> Unit) {
   LazyColumn(content = {
-    items(gymList) {
+    items(state.gym) {
       gymItem(it, onFavoriteClicked, onItemClicked)
     }
   })
+  if (state.isLoading) CircularProgressIndicator()
+  if (state.error != null) Text(text = state.error)
 
 }
 
