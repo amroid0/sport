@@ -1,7 +1,11 @@
-package com.amroid.sport.ui
+package com.amroid.sport.gym.data
 
 import com.amroid.sport.GymApp
-import com.amroid.sport.GymService
+import com.amroid.sport.gym.data.remote.GymService
+import com.amroid.sport.gym.domain.Gym
+import com.amroid.sport.gym.data.local.GymDatabase
+import com.amroid.sport.gym.data.local.LocalGym
+import com.amroid.sport.gym.data.local.LocalUpdateGym
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -14,30 +18,30 @@ class GymRepository {
       .addConverterFactory(GsonConverterFactory.create()).build().create(GymService::class.java)
   private val gymDao = GymDatabase.getDaoInstance(GymApp.getInstnace())
 
-  suspend fun getAllGym() = withContext(Dispatchers.IO) {
-
+  suspend fun loadGymList() = withContext(Dispatchers.IO) {
     try {
-      updateLocalDatabase()
+      loadGyms()
     } catch (ex: Exception) {
     }
-    gymDao.getAllGym()
   }
 
-  suspend fun updateLocalDatabase() {
+  private suspend fun loadGyms() {
     val list = gymService.getGymList()
     val favoriteGyms = gymDao.getFavoriteGym()
-    gymDao.addAllGym(list)
+    gymDao.addAllGym(list.map { LocalGym(it.id, it.name, it.desc, it.isOpen) })
     gymDao.updateAllGym(favoriteGyms.map {
-      UpdateGym(it.id, true)
+      LocalUpdateGym(it.id, true)
     })
   }
 
-  suspend fun favroitGym(id: Int, isfavrotie: Boolean): List<Gym> {
+  suspend fun toggleFavoriteGym(id: Int, isFavorite: Boolean){
     return withContext(Dispatchers.IO) {
-      gymDao.updateGym(UpdateGym(id, isfavrotie))
-      gymDao.getAllGym()
+      gymDao.updateGym(LocalUpdateGym(id, isFavorite))
     }
   }
+
+  suspend fun getGymList() =
+    gymDao.getAllGym().map { Gym(it.id, it.name, it.desc, it.isOpen, it.isFav) }
 
 
 }

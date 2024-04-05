@@ -1,4 +1,4 @@
-package com.amroid.sport.ui
+package com.amroid.sport.gym.presention
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,7 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.amroid.sport.GymService
+import com.amroid.sport.gym.data.remote.GymService
+import com.amroid.sport.gym.domain.Gym
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -1,4 +1,4 @@
-package com.amroid.sport.ui
+package com.amroid.sport.gym.presention
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
