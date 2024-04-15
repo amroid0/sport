@@ -15,10 +15,10 @@ interface GymDao {
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun addAllGym(gym: List<LocalGym>)
 
-  @Update(entity = Gym::class)
+  @Update(entity = LocalGym::class)
   suspend fun updateGym(localUpdateGym: LocalUpdateGym)
 
-  @Update(entity = Gym::class)
+  @Update(entity = LocalGym::class)
   suspend fun updateAllGym(localUpdateGym: List<LocalUpdateGym>)
 
   @Query("select * from gym_table where is_fav = 1")

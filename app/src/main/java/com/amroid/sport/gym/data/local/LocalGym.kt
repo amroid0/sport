@@ -13,7 +13,7 @@ data class LocalGym(
   @ColumnInfo(name = "gym_desc")
   val desc: String,
   val isOpen: Boolean,
-  @ColumnInfo("is_fav")
+  @ColumnInfo(name="is_fav")
   val isFav: Boolean = false,
 )
 

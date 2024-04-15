@@ -9,15 +9,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.amroid.sport.gym.domain.GetInitialGymListUscCase
 import com.amroid.sport.gym.domain.ToggleFavroitUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-
-class GymViewModel : ViewModel() {
+import javax.inject.Inject
+@HiltViewModel
+class GymViewModel @Inject constructor(
+  val getInitialGymListUscCase: GetInitialGymListUscCase,
+  val toggleFavoriteUscCase: ToggleFavroitUseCase
+) : ViewModel() {
   var _state by mutableStateOf(GymState(arrayListOf(), isLoading = true))
   val state: State<GymState>
     get() = derivedStateOf { _state }
-  private val getInitialGymListUscCase = GetInitialGymListUscCase()
-  private val toggleFavoriteUscCase = ToggleFavroitUseCase()
   private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
     throwable.printStackTrace()
     _state = _state.copy(isLoading = false, error = "${throwable.message}")

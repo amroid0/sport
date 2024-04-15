@@ -1,6 +1,7 @@
 package com.amroid.sport.gym.data
 
 import com.amroid.sport.GymApp
+import com.amroid.sport.gym.data.local.GymDao
 import com.amroid.sport.gym.data.remote.GymService
 import com.amroid.sport.gym.domain.Gym
 import com.amroid.sport.gym.data.local.GymDatabase
@@ -10,13 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GymRepository {
+@Singleton
+class GymRepository @Inject constructor(val gymService: GymService,val gymDao:GymDao){
 
-  private var gymService: GymService =
-    Retrofit.Builder().baseUrl("https://gymapi-e48a8-default-rtdb.firebaseio.com/")
-      .addConverterFactory(GsonConverterFactory.create()).build().create(GymService::class.java)
-  private val gymDao = GymDatabase.getDaoInstance(GymApp.getInstnace())
 
   suspend fun loadGymList() = withContext(Dispatchers.IO) {
     try {

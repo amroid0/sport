@@ -7,7 +7,7 @@ import androidx.room.Entity
 data class LocalUpdateGym(
   @ColumnInfo(name = "gym_id")
   val id: Int,
-  @ColumnInfo("is_fav")
+  @ColumnInfo(name="is_fav")
   val isFav: Boolean = false,
 )
 
